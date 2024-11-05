@@ -2,7 +2,7 @@
     <header class="pb-3 mb-2">
         <div class="container">
             <router-link to="/" class="navbar-brand d-flex align-items-center">
-                <img src="/logo.png" alt="High Republic Visual" class="me-4" height="50"/>
+                <img :src="logo_url" alt="High Republic Visual" class="me-4" height="50"/>
                 <span style="font-size: 2.5rem;">The High Republic Visual Guide</span>
             </router-link>
         </div>
@@ -20,6 +20,9 @@
 <script>
 export default {
     computed: {
+        logo_url() {
+            return `${process.env.BASE_URL}logo.png`;
+        },
         breadcrumbs() {
             var breadcrumbs = []
 

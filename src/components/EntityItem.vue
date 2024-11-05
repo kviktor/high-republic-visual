@@ -42,10 +42,10 @@ export default {
                 }
             });
 
-            arr.unshift("/images");
+            arr.unshift("images");
             arr.push(this.name);
 
-            return arr.join("/");
+            return `${process.env.BASE_URL}${arr.join("/")}`;
         },
         link() {
             return {
