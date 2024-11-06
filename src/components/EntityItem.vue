@@ -1,10 +1,10 @@
 <template>
     <div class="col">
         <div v-if="is_image" class="card h-100">
-            <img :src="src" class="card-img-top" alt="...">
+            <img :src="thumbnail_src" class="card-img-top" alt="...">
             <div class="card-body">
                 <p class="card-text">{{ name }}</p>
-                <a :href="src" class="btn btn-primary stretched-link" target="_blank">View</a>
+                <a :href="image_src" class="btn btn-primary stretched-link" target="_blank">View</a>
             </div>
         </div>
         <div v-else class="card h-100">
@@ -27,7 +27,10 @@ export default {
         is_image() {
             return this.name.indexOf(".") !== -1;
         },
-        src() {
+        thumbnail_src() {
+            return this.image_src.replace("/images/", "/thumbnails/");
+        },
+        image_src() {
             var arr = [];
             var parent = null;
 
@@ -61,7 +64,7 @@ export default {
 
 <style scoped>
     .card-img-top {
-        height: 15vw;
+        height: 300px;
         object-fit: cover;
     }
 </style>
