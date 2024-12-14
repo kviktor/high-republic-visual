@@ -4,7 +4,8 @@ from pathlib import Path
 import json
 import re
 
-image_directory = "public/images/"
+image_directory = "public/images"
+json_directory = "src/assets"
 
 
 def slugify(value):
@@ -26,7 +27,6 @@ for path in iterator:
     if path.is_dir():
         data.append(
             {
-                # "type": "d",
                 "name": path.name,
                 "slug": slugify(path.name),
                 "parent": parent or None,
@@ -39,13 +39,16 @@ for path in iterator:
 
         data.append(
             {
-                # "type": "i",
                 "name": path.name,
                 "slug": slugify(path.name),
                 "parent": parent or None,
             },
         )
 
+# some hacking around to make them sorted in ascending order but but the
+# children one at the end
+first_page = sorted(data[:4], key=lambda x: x["name"])
+data = first_page[1:] + [first_page[0]] + data[4:]
 
-with open("src/assets/structure.json", "w") as f:
+with open(f"{json_directory}/structure.json", "w") as f:
    json.dump(data, f, separators=(',', ':'))
