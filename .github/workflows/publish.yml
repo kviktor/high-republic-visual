@@ -29,6 +29,7 @@ jobs:
           yarn install
           yarn build
           cp dist/index.html dist/404.html
+          echo "high-republic-visual.szi.app" > dist/CNAME
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
