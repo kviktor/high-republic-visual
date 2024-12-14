@@ -21,7 +21,7 @@
 export default {
     computed: {
         logo_url() {
-            return `${process.env.BASE_URL}logo.png`;
+            return process.env.BASE_URL + 'logo.webp';
         },
         breadcrumbs() {
             var breadcrumbs = []
@@ -54,7 +54,7 @@ export default {
             )
 
             return breadcrumbs;
-        }   
+        }
     }
 };
 </script>

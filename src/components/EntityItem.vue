@@ -48,7 +48,7 @@ export default {
             arr.unshift("images");
             arr.push(this.name);
 
-            return `${process.env.BASE_URL}${arr.join("/")}`;
+            return process.env.BASE_URL + arr.join('/');
         },
         link() {
             return {
