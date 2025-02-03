@@ -1,10 +1,12 @@
 <template>
     <header class="pb-3 mb-2">
         <div class="container">
-            <router-link to="/" class="navbar-brand d-flex align-items-center">
-                <img :src="logo_url" alt="High Republic Visual" class="me-4" height="50"/>
-                <span style="font-size: 2.5rem;">The High Republic Visual Guide</span>
-            </router-link>
+            <div class="d-flex">
+                <router-link to="/" class="navbar-brand d-flex align-items-center col-9">
+                    <img :src="logo_url" alt="High Republic Visual" class="me-4" height="50"/>
+                    <h1>The High Republic Visual Guide</h1>
+                </router-link>
+            </div>
         </div>
     </header>
     <nav>
@@ -21,28 +23,24 @@
 export default {
     computed: {
         logo_url() {
-            return process.env.BASE_URL + 'logo.webp';
+            return process.env.BASE_URL + 'logo_header.webp';
         },
         breadcrumbs() {
-            var breadcrumbs = []
+            var breadcrumbs = [];
+            var slugs = [];
 
-            if (this.$route.params.ids) {
-                var parent = [];
-                this.$route.params.ids.forEach(part => {
-                    var entity = this.$store.getters.getEntityById(parent.length > 0 ? parent.join("_") : null, part);
-                    parent.push(entity.slug);
-
-                    breadcrumbs.push({
-                        name: entity.name,
-                        link: {
-                            name: "list",
-                            params: {
-                                ids: structuredClone(parent),
-                            },
+            this.$store.getters.getCurrentEntities.forEach(entity => {
+                slugs.push(entity.slug);
+                breadcrumbs.push({
+                    name: entity.name,
+                    link: {
+                        name: "list",
+                        params: {
+                            ids: structuredClone(slugs),
                         },
-                    });
+                    },
                 });
-            }
+            });
 
             breadcrumbs.unshift(
                 {

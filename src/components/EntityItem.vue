@@ -9,7 +9,7 @@
         </div>
         <div v-else class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">{{ name }}</h5>
+                <h5 class="card-title">{{ get_name }}</h5>
             </div>
             <div class="card-footer text-end">
                 <router-link :to="link" class="btn btn-primary stretched-link">View</router-link>
@@ -22,27 +22,26 @@
 
 
 export default {
-    props: ["name", "slug"],
+    props: ["id", "name", "slug"],
     computed: {
         is_image() {
             return this.name.indexOf(".") !== -1;
+        },
+        get_name() { 
+            if (this.$route.name === "list") {
+                return this.name;
+            } else {
+                return this.$store.getters.getParentEntitiesById(this.id).map(entity => entity.name).concat(this.name).join(" / ");
+            }
         },
         thumbnail_src() {
             return this.image_src.replace("/images/", "/thumbnails/");
         },
         image_src() {
             var arr = [];
-            var parent = null;
 
-            this.$route.params.ids.forEach(slug => {
-                var entity = this.$store.getters.getEntityById(parent, slug);
+            this.$store.getters.getParentEntitiesById(this.id).forEach(entity => {
                 arr.push(entity.name);
-
-                if(parent === null) {
-                    parent = entity.slug;
-                } else {
-                    parent += "_" + entity.slug;
-                }
             });
 
             arr.unshift("images");
@@ -51,10 +50,12 @@ export default {
             return process.env.BASE_URL + arr.join('/');
         },
         link() {
+            var parents = this.$store.getters.getParentEntitiesById(this.id).map(entity => entity.slug);
+
             return {
                 name: "list",
                 params: {
-                    ids: (this.$route.params.ids ? this.$route.params.ids.map(p => p) : []).concat(this.slug),
+                    ids: parents.concat(this.slug),
                 },
             }
         }

@@ -2,7 +2,8 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         <entity-item
             v-for="entity in entities"
-            :key="entity.parent + '_' + entity.slug"
+            :key="entity.id"
+            :id="entity.id"
             :slug="entity.slug"
             :name="entity.name"
         ></entity-item>
@@ -20,12 +21,18 @@ export default {
         entities() {
             var entities = this.$store.getters.getEntities;
 
-            var parent = null;
-            if (this.$route.params.ids) {
-                parent = this.$route.params.ids.join("_");
+            if (this.$route.name === "list") {
+                var currentEntities = this.$store.getters.getCurrentEntities;
+                var parent = null;
+                if(currentEntities.length > 0) {
+                    parent = currentEntities.at(-1).id;
+                }
+                
+                return entities.filter((entity) => entity.parent === parent);
+            } else {
+                return entities.filter((entity) => entity.name.toLowerCase().includes(this.$route.params.searchQuery.toLowerCase())).sort((a, b) => a.name.indexOf(".") < b.name.indexOf(".") ? -1 : 1);
             }
 
-            return entities.filter((entity) => entity.parent === parent);
         },
     }
 };
